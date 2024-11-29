@@ -3,7 +3,7 @@ import mediapipe as mp
 import pickle
 import numpy as np
 
-# Load model and labels
+# load model and labels
 model_dict = pickle.load(open('./model.p', 'rb'))
 model = model_dict['model']
 
@@ -85,28 +85,27 @@ while True:
         prediction = model.predict([np.asarray(data_aux)])
         predicted_char = labels_dict[int(prediction[0])]
 
-        # Adjust rectangle positioning
+        # rectangle positioning
         rect_height = 40
-        rect_y1 = y1 - rect_height - 10  # Rectangle above the bounding box
+        rect_y1 = y1 - rect_height - 10  # rectangle above the bounding box
         rect_y2 = y1 - 10
 
-        # Ensure rectangle doesn't go out of bounds
+        # ensuring rectangle doesn't go out of bounds
         if rect_y1 < 0:
             rect_y1 = 0
             rect_y2 = rect_height
 
-        # Draw the rectangle and text
-        cv2.rectangle(frame, (x1, rect_y1), (x2, rect_y2), (0, 0, 0), -1)  # Filled rectangle
+        # rectangle and text
+        cv2.rectangle(frame, (x1, rect_y1), (x2, rect_y2), (0, 0, 0), -1) 
         text_size = cv2.getTextSize(predicted_char, cv2.FONT_HERSHEY_SIMPLEX, 1, 2)[0]
         text_x = x1 + (x2 - x1 - text_size[0]) // 2
         text_y = rect_y2 - 10
 
         cv2.putText(frame, predicted_char, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
-    # Display the frame
     cv2.imshow('Hand Sign Detection', frame)
 
-    # Exit on 'q' key press
+    # exit on 'q' key press
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
